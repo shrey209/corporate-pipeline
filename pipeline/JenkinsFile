@@ -1,12 +1,32 @@
 pipeline {
-  agent {
-    docker { image 'node:16-alpine' }
-  }
-  stages {
-    stage('Test') {
-      steps {
-        sh 'node --version'
-      }
+    agent any
+    environment {
+        DOCKERHUB_CREDENTIALS_ID = '0eb81c52-8905-45f6-8468-42edad3cfe56'
+        IMAGE_NAME = 'shreynode1'
     }
-  }
+    stages {
+        stage('Clone Repository') {
+            steps {
+                git 'https://github.com/shrey209/corporate-pipeline.git'  
+            }
+        }
+        stage('Build Docker Image') {
+            steps {
+                sh 'docker build -t $IMAGE_NAME .'
+            }
+        }
+        stage('Login to DockerHub') {
+            steps {
+                withCredentials([usernamePassword(credentialsId: DOCKERHUB_CREDENTIALS_ID, usernameVariable: 'DOCKER_USER', passwordVariable: 'DOCKER_PASS')]) {
+                    sh 'echo $DOCKER_PASS | docker login -u $DOCKER_USER --password-stdin'
+                }
+            }
+        }
+        stage('Push Image to DockerHub') {
+            steps {
+                sh 'docker tag $IMAGE_NAME $DOCKER_USER/$IMAGE_NAME'
+                sh 'docker push $DOCKER_USER/$IMAGE_NAME'
+            }
+        }
+    }
 }
