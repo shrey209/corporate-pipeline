@@ -11,7 +11,7 @@ WORKDIR /app
 
 COPY . .
 
-RUN npn install
+RUN npm install
 
 EXPOSE 80
 
