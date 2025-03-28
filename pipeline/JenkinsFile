@@ -1,7 +1,7 @@
 pipeline {
     agent any
     environment {
-        DOCKERHUB_CREDENTIALS_ID = '0eb81c52-8905-45f6-8468-42edad3cfe56'
+        DOCKERHUB_CREDENTIALS_ID = '6061c6c0-d9b1-4c0c-920a-880c77ed1dec'
         IMAGE_NAME = 'shreynode1'
     }
     stages {
