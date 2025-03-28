@@ -26,7 +26,7 @@ pipeline {
         stage('Push Image to DockerHub') {
             steps {
                 sh 'docker tag $IMAGE_NAME $DOCKER_USER/$IMAGE_NAME'
-                sh 'docker push $DOCKER_USER/$IMAGE_NAME'
+                sh 'docker push $DOCKER_USER/$IMAGE_NAME:latest'
             }
         }
     }
