@@ -8,7 +8,6 @@ pipeline {
         stage('Clone Repository') {
             steps {
                git branch: 'main', url: 'https://github.com/shrey209/corporate-pipeline.git'
-
             }
         }
         stage('Build Docker Image') {
@@ -25,8 +24,12 @@ pipeline {
         }
         stage('Push Image to DockerHub') {
             steps {
-                sh 'docker tag $IMAGE_NAME $DOCKER_USER/$IMAGE_NAME'
-                sh 'docker push $DOCKER_USER/$IMAGE_NAME:latest'
+                withCredentials([usernamePassword(credentialsId: DOCKERHUB_CREDENTIALS_ID, usernameVariable: 'DOCKER_USER', passwordVariable: 'DOCKER_PASS')]) {
+                    sh '''
+                        docker tag $IMAGE_NAME $DOCKER_USER/$IMAGE_NAME:latest
+                        docker push $DOCKER_USER/$IMAGE_NAME:latest
+                    '''
+                }
             }
         }
     }
