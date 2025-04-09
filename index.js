@@ -4,7 +4,7 @@ const express = require("express");
 const app = express();
 
 app.get("/", async (req, res) => {
-  res.send("Hello this is cicd with jenkins and argocd");
+  res.send("Umesh Bhau ka Project");
 });
 
 const PORT = process.env.PORT | 80;
