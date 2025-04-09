@@ -3,18 +3,22 @@ pipeline {
     environment {
         DOCKERHUB_CREDENTIALS_ID = '6061c6c0-d9b1-4c0c-920a-880c77ed1dec'
         IMAGE_NAME = 'shreynode1'
+        GITOPS_REPO = 'https://github.com/shrey209/Git-ops.git'
+        GITOPS_CREDENTIALS_ID = '86db9b95-6045-40c3-b4f7-c4fcd88553b2' // your GitHub PAT credentials ID
     }
     stages {
-        stage('Clone Repository') {
+        stage('Clone Application Repo') {
             steps {
-               git branch: 'main', url: 'https://github.com/shrey209/corporate-pipeline.git'
+                git branch: 'main', url: 'https://github.com/shrey209/corporate-pipeline.git'
             }
         }
+
         stage('Build Docker Image') {
             steps {
                 sh 'docker build -t $IMAGE_NAME .'
             }
         }
+
         stage('Login to DockerHub') {
             steps {
                 withCredentials([usernamePassword(credentialsId: DOCKERHUB_CREDENTIALS_ID, usernameVariable: 'DOCKER_USER', passwordVariable: 'DOCKER_PASS')]) {
@@ -22,12 +26,35 @@ pipeline {
                 }
             }
         }
+
         stage('Push Image to DockerHub') {
             steps {
                 withCredentials([usernamePassword(credentialsId: DOCKERHUB_CREDENTIALS_ID, usernameVariable: 'DOCKER_USER', passwordVariable: 'DOCKER_PASS')]) {
                     sh '''
                         docker tag $IMAGE_NAME $DOCKER_USER/$IMAGE_NAME:latest
                         docker push $DOCKER_USER/$IMAGE_NAME:latest
+                    '''
+                }
+            }
+        }
+
+        stage('Update GitOps Repo for Argo CD') {
+            steps {
+                withCredentials([usernamePassword(credentialsId: GITOPS_CREDENTIALS_ID, usernameVariable: 'GIT_USER', passwordVariable: 'GIT_PASS')]) {
+                    sh '''
+                        rm -rf Git-ops
+                        git clone https://$GIT_USER:$GIT_PASS@github.com/shrey209/Git-ops.git
+                        cd Git-ops
+
+                        # Dummy update to trigger Argo CD
+                        TIMESTAMP=$(date +%s)
+                        echo "# redeploy: $TIMESTAMP" > .argocd-trigger
+
+                        git config user.email "jenkins@local"
+                        git config user.name "Jenkins CI"
+                        git add .argocd-trigger
+                        git commit -m "Trigger ArgoCD deployment - $TIMESTAMP"
+                        git push
                     '''
                 }
             }
