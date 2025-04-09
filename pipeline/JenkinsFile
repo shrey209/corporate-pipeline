@@ -4,7 +4,7 @@ pipeline {
         DOCKERHUB_CREDENTIALS_ID = '6061c6c0-d9b1-4c0c-920a-880c77ed1dec'
         IMAGE_NAME = 'shreynode1'
         GITOPS_REPO = 'https://github.com/shrey209/Git-ops.git'
-        GITOPS_CREDENTIALS_ID = '86db9b95-6045-40c3-b4f7-c4fcd88553b2' // your GitHub PAT credentials ID
+        GITOPS_CREDENTIALS_ID = '86db9b95-6045-40c3-b4f7-c4fcd88553b2'
     }
     stages {
         stage('Clone Application Repo') {
@@ -13,9 +13,18 @@ pipeline {
             }
         }
 
+        stage('Generate Image Tag') {
+            steps {
+                script {
+                    env.IMAGE_TAG = sh(script: 'date +%s', returnStdout: true).trim()
+                    echo "Generated image tag: $IMAGE_TAG"
+                }
+            }
+        }
+
         stage('Build Docker Image') {
             steps {
-                sh 'docker build -t $IMAGE_NAME .'
+                sh 'docker build -t $IMAGE_NAME:$IMAGE_TAG .'
             }
         }
 
@@ -31,7 +40,9 @@ pipeline {
             steps {
                 withCredentials([usernamePassword(credentialsId: DOCKERHUB_CREDENTIALS_ID, usernameVariable: 'DOCKER_USER', passwordVariable: 'DOCKER_PASS')]) {
                     sh '''
-                        docker tag $IMAGE_NAME $DOCKER_USER/$IMAGE_NAME:latest
+                        docker tag $IMAGE_NAME:$IMAGE_TAG $DOCKER_USER/$IMAGE_NAME:$IMAGE_TAG
+                        docker push $DOCKER_USER/$IMAGE_NAME:$IMAGE_TAG
+                        docker tag $DOCKER_USER/$IMAGE_NAME:$IMAGE_TAG $DOCKER_USER/$IMAGE_NAME:latest
                         docker push $DOCKER_USER/$IMAGE_NAME:latest
                     '''
                 }
@@ -46,14 +57,13 @@ pipeline {
                         git clone https://$GIT_USER:$GIT_PASS@github.com/shrey209/Git-ops.git
                         cd Git-ops
 
-                        # Dummy update to trigger Argo CD
-                        TIMESTAMP=$(date +%s)
-                        echo "# redeploy: $TIMESTAMP" > .argocd-trigger
+                        # Update image tag in deployment.yml
+                        sed -i "s|image: shrey209/shreynode1:.*|image: shrey209/shreynode1:$IMAGE_TAG|" deployment.yml
 
                         git config user.email "jenkins@local"
                         git config user.name "Jenkins CI"
-                        git add .argocd-trigger
-                        git commit -m "Trigger ArgoCD deployment - $TIMESTAMP"
+                        git add deployment.yml
+                        git commit -m "Update image tag to $IMAGE_TAG for ArgoCD"
                         git push
                     '''
                 }
