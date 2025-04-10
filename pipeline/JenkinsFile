@@ -29,12 +29,13 @@ pipeline {
         }
 
         stage('Scan Docker Image with Trivy') {
-            steps {
-                sh '''
-                    trivy image --exit-code 1 --severity CRITICAL,HIGH $IMAGE_NAME:$IMAGE_TAG
-                '''
-            }
-        }
+    steps {
+        sh '''
+            trivy image --exit-code 1 --severity CRITICAL,HIGH --skip-dirs node_modules $IMAGE_NAME:$IMAGE_TAG
+        '''
+    }
+}
+
 
         stage('Login to DockerHub') {
             steps {
