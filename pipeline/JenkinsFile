@@ -13,6 +13,16 @@ pipeline {
             }
         }
 
+        stage('Run NPM Audit') {
+            steps {
+                sh '''
+                    npm install
+                    npm audit --audit-level=high
+                    rm -rf node_modules package-lock.json
+                '''
+            }
+        }
+
         stage('Generate Image Tag') {
             steps {
                 script {
@@ -27,15 +37,6 @@ pipeline {
                 sh 'docker build -t $IMAGE_NAME:$IMAGE_TAG .'
             }
         }
-
-        stage('Scan Docker Image with Trivy') {
-    steps {
-        sh '''
-            trivy image --exit-code 1 --severity CRITICAL,HIGH --skip-dirs node_modules $IMAGE_NAME:$IMAGE_TAG
-        '''
-    }
-}
-
 
         stage('Login to DockerHub') {
             steps {
