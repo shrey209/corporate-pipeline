@@ -7,7 +7,7 @@ const { notFound } = require("./middlewares/not-found");
 const { errorHandlerMiddleware } = require("./middlewares/error-handler");
 
 const app = express();
-const Port = process.env.PORT | 3001;
+const Port = process.env.PORT | 80;
 
 app.use(express.json());
 app.use(express.static("./public"));
