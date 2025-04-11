@@ -1,16 +1,22 @@
 {
   "name": "corporate-pipeline",
   "version": "1.0.0",
-  "description": "a corporate-pipline for devops learnnings",
+  "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "dev": "node index.js"
+    "start": "node index.js"
   },
+  "keywords": [],
   "author": "",
   "license": "ISC",
   "dependencies": {
     "dotenv": "^16.4.7",
-    "express": "^4.21.2"
+    "express": "^4.19.2",
+    "mongoose": "^8.13.2",
+    "nodemon": "^3.1.4"
+  },
+  "devDependencies": {
+    "concurrently": "^8.2.2",
+    "lite-server": "^2.6.1"
   }
 }
