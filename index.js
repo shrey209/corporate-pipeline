@@ -4,7 +4,7 @@ const express = require("express");
 const app = express();
 
 app.get("/", async (req, res) => {
-  res.send("Final Project With Jenkins and github By our Team : Vedant , Shreyash, Bhushan, Sarvesh, Umesh");
+  res.send("Final Project With Jenkins and github By our Team : Vedant , Shreyash, Bhushan, Sarvesh");
 });
 
 const PORT = process.env.PORT | 80;
