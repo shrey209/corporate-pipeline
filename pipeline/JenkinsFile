@@ -5,7 +5,7 @@ pipeline {
         IMAGE_NAME = 'shreynode1'
         GITOPS_REPO = 'https://github.com/shrey209/Git-ops.git'
         GITOPS_CREDENTIALS_ID = '86db9b95-6045-40c3-b4f7-c4fcd88553b2'
-        SONAR_TOKEN_ID = '66865ed8-6f31-4229-b6ce-e690ee6a9ed0'
+        SONAR_TOKEN_ID = '694afdb5-7d6f-4eb1-b40e-3d3135c9d834'
         SONARQUBE_SERVER = 'SonarQube' // Should match name configured in Jenkins "Configure System"
     }
 
