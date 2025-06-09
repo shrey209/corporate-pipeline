@@ -8,6 +8,9 @@ The pipeline automates the process of building, testing, and deploying a Node.js
 ## 🧱 Architecture Overview
 
 ![Architecture Diagram](image/cicd.jpg)
+![sonarcube](image/img2.jpg)
+![status](image/img3.jpg)
+![Argo cd](image/img4.jpg)
 
 > 
 
@@ -17,7 +20,7 @@ The pipeline automates the process of building, testing, and deploying a Node.js
 
 - **Jenkins** – For Continuous Integration (CI)  
 - **Docker** – For containerization  
-- **SonarQube** – For static code analysis  
+- **SonarQube** – For static code analysis   
 - **npm audit** – For security vulnerability checks  
 - **Docker Hub** – For storing built images  
 - **Argo CD** – For GitOps-based deployment  
