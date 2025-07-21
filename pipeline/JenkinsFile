@@ -16,23 +16,22 @@ pipeline {
             }
         }
 
-        stage('SonarQube Analysis') {
-            steps {
-                withCredentials([string(credentialsId: SONAR_TOKEN_ID, variable: 'SONAR_TOKEN')]) {
-                    withSonarQubeEnv("${env.SONARQUBE_SERVER}") {
-                        sh '''
-                            npm install
-                            npx sonar-scanner \
-                              -Dsonar.projectKey=corporate-pipeline \
-                              -Dsonar.sources=. \
-                              -Dsonar.host.url=http://localhost:9000 \
-                              -Dsonar.login=$SONAR_TOKEN
-                            rm -rf node_modules package-lock.json
-                        '''
-                    }
-                }
-            }
+       stage('SonarQube Analysis') {
+    steps {
+        withCredentials([string(credentialsId: SONAR_TOKEN_ID, variable: 'SONAR_TOKEN')]) {
+            sh '''
+                npm install
+                npx sonar-scanner \
+                  -Dsonar.projectKey=corporate-pipeline \
+                  -Dsonar.sources=. \
+                  -Dsonar.host.url=http://43.205.146.39:9000 \
+                  -Dsonar.login=$SONAR_TOKEN
+                rm -rf node_modules package-lock.json
+            '''
         }
+    }
+}
+
 
         stage("Quality Gate") {
             steps {
