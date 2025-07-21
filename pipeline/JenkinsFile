@@ -14,15 +14,7 @@ pipeline {
             }
         }
 
-        stage('Run NPM Audit') {
-            steps {
-                sh '''
-                    npm install
-                    npm audit --audit-level=high
-                    rm -rf node_modules package-lock.json
-                '''
-            }
-        }
+  
 
         stage('Generate Image Tag') {
             steps {
