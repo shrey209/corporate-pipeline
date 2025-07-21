@@ -1,10 +1,10 @@
 pipeline {
     agent any
     environment {
-        DOCKERHUB_CREDENTIALS_ID = '6061c6c0-d9b1-4c0c-920a-880c77ed1dec'
+        DOCKERHUB_CREDENTIALS_ID = 'a8f93096-034d-4603-8aa2-ac184b655c83'
         IMAGE_NAME = 'shreynode1'
         GITOPS_REPO = 'https://github.com/shrey209/Git-ops.git'
-        GITOPS_CREDENTIALS_ID = '86db9b95-6045-40c3-b4f7-c4fcd88553b2'
+        GITOPS_CREDENTIALS_ID = 'e2697531-a97e-4a83-91d2-325fb16f1ffe'
         SONAR_TOKEN_ID = '694afdb5-7d6f-4eb1-b40e-3d3135c9d834'
         SONARQUBE_SERVER = 'SonarQube' // Should match name configured in Jenkins "Configure System"
     }
