@@ -16,19 +16,18 @@ pipeline {
             }
         }
 
-      stage('SonarQube Analysis') {
+    stage('SonarQube Analysis') {
     steps {
-        withSonarQubeEnv(SONARQUBE_SERVER) {
-            withCredentials([string(credentialsId: SONAR_TOKEN_ID, variable: 'SONAR_TOKEN')]) {
-                sh '''
-                    npm install
-                    npx sonar-scanner \
-                      -Dsonar.projectKey=corporate-pipeline \
-                      -Dsonar.sources=. \
-                      -Dsonar.token=$SONAR_TOKEN
-                    rm -rf node_modules package-lock.json
-                '''
-            }
+        withCredentials([string(credentialsId: SONAR_TOKEN_ID, variable: 'SONAR_TOKEN')]) {
+            sh '''
+                npm install
+                npx sonar-scanner \
+                  -Dsonar.projectKey=corporate-pipeline \
+                  -Dsonar.sources=. \
+                  -Dsonar.host.url=http://43.205.146.39:9000 \
+                  -Dsonar.token=$SONAR_TOKEN
+                rm -rf node_modules package-lock.json .scannerwork
+            '''
         }
     }
 }
