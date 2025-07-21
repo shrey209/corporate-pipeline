@@ -1,10 +1,10 @@
 pipeline {
     agent any
     environment {
-        DOCKERHUB_CREDENTIALS_ID = 'a8f93096-034d-4603-8aa2-ac184b655c83'
+        DOCKERHUB_CREDENTIALS_ID = dd5a3a44-78e0-459d-a477-ea730acc62ae'
         IMAGE_NAME = 'shreynode1'
         GITOPS_REPO = 'https://github.com/shrey209/Git-ops.git'
-        GITOPS_CREDENTIALS_ID = 'e2697531-a97e-4a83-91d2-325fb16f1ffe'
+        GITOPS_CREDENTIALS_ID = '17a8c829-f1f1-4e8f-8437-6e60f5f2f046'
     }
 
     stages {
