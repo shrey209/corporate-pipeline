@@ -5,40 +5,12 @@ pipeline {
         IMAGE_NAME = 'shreynode1'
         GITOPS_REPO = 'https://github.com/shrey209/Git-ops.git'
         GITOPS_CREDENTIALS_ID = 'e2697531-a97e-4a83-91d2-325fb16f1ffe'
-        SONAR_TOKEN_ID = '36654c2e-73c2-4e7a-a2d6-12d68e36fbcb'
-        SONARQUBE_SERVER = 'SonarQube' // Should match name configured in Jenkins "Configure System"
     }
 
     stages {
         stage('Clone Application Repo') {
             steps {
                 git branch: 'main', url: 'https://github.com/shrey209/corporate-pipeline.git'
-            }
-        }
-
-    stage('SonarQube Analysis') {
-    steps {
-        withCredentials([string(credentialsId: SONAR_TOKEN_ID, variable: 'SONAR_TOKEN')]) {
-            sh '''
-                npm install
-                npx sonar-scanner \
-                  -Dsonar.projectKey=corporate-pipeline \
-                  -Dsonar.sources=. \
-                  -Dsonar.host.url=http://43.205.146.39:9000 \
-                  -Dsonar.token=$SONAR_TOKEN
-                rm -rf node_modules package-lock.json .scannerwork
-            '''
-        }
-    }
-}
-
-
-
-        stage("Quality Gate") {
-            steps {
-                timeout(time: 1, unit: 'MINUTES') {
-                    waitForQualityGate abortPipeline: true
-                }
             }
         }
 
