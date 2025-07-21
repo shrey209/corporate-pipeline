@@ -52,25 +52,26 @@ pipeline {
             }
         }
 
-        stage('Update GitOps Repo for Argo CD') {
-            steps {
-                withCredentials([usernamePassword(credentialsId: GITOPS_CREDENTIALS_ID, usernameVariable: 'GIT_USER', passwordVariable: 'GIT_PASS')]) {
-                    sh '''
-                        rm -rf Git-ops
-                        git clone https://$GIT_USER:$GIT_PASS@github.com/shrey209/Git-ops.git
-                        cd Git-ops
+    stage('Update GitOps Repo for Argo CD') {
+    steps {
+        withCredentials([usernamePassword(credentialsId: GITOPS_CREDENTIALS_ID, usernameVariable: 'GIT_USER_IGNORED', passwordVariable: 'GIT_PASS')]) {
+            sh '''
+                rm -rf Git-ops
+                git clone https://shrey209:$GIT_PASS@github.com/shrey209/Git-ops.git
+                cd Git-ops
 
-                        # Update image tag in deployment.yml
-                        sed -i "s|image: shrey209/shreynode1:.*|image: shrey209/shreynode1:$IMAGE_TAG|" deployment.yml
+                # Update image tag in deployment.yml
+                sed -i "s|image: shrey209/shreynode1:.*|image: shrey209/shreynode1:$IMAGE_TAG|" deployment.yml
 
-                        git config user.email "jenkins@local"
-                        git config user.name "Jenkins CI"
-                        git add deployment.yml
-                        git commit -m "Update image tag to $IMAGE_TAG for ArgoCD"
-                        git push
-                    '''
-                }
-            }
+                git config user.email "jenkins@local"
+                git config user.name "Jenkins CI"
+                git add deployment.yml
+                git commit -m "Update image tag to $IMAGE_TAG for ArgoCD"
+                git push
+            '''
         }
+    }
+}
+
     }
 }
