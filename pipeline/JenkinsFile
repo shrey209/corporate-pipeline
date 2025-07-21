@@ -25,7 +25,7 @@ pipeline {
                   -Dsonar.projectKey=corporate-pipeline \
                   -Dsonar.sources=. \
                   -Dsonar.host.url=http://43.205.146.39:9000 \
-                  -Dsonar.login=$SONAR_TOKEN
+                  -Dsonar.token=$SONAR_TOKEN
                 rm -rf node_modules package-lock.json
             '''
         }
