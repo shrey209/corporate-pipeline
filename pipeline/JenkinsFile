@@ -25,7 +25,7 @@ pipeline {
                             npx sonar-scanner \
                               -Dsonar.projectKey=corporate-pipeline \
                               -Dsonar.sources=. \
-                              -Dsonar.host.url=$SONAR_HOST_URL \
+                              -Dsonar.host.url=http://localhost:9000 \
                               -Dsonar.login=$SONAR_TOKEN
                             rm -rf node_modules package-lock.json
                         '''
